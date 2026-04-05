@@ -20,8 +20,8 @@ VisualizeMasksNode::VisualizeMasksNode(const rclcpp::NodeOptions & options)
   const std::string output_topic = this->declare_parameter<std::string>("output_topic", "~/out/image");
   measure_latency_ = this->declare_parameter<bool>("measure_latency", true);
 
-  // Create common masks visualization engine
-  viz_engine_ = std::make_unique<autoware_pov::common::MasksVisualizationEngine>(viz_type_);
+  // Create common masks visualization engine (disable OpenCV window for headless RunPod)
+  viz_engine_ = std::make_unique<autoware_pov::common::MasksVisualizationEngine>(viz_type_, false);
 
   // Publisher
   pub_ = image_transport::create_publisher(this, output_topic);
