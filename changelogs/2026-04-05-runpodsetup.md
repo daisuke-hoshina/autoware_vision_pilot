@@ -98,16 +98,9 @@ mkdir -p data/models
 2. **サンプル動画**: 任意のテスト用動画ファイル（例：スマートフォンで撮影した車載動画やWeb上のフリー素材）を `video.mp4` という名前で `data/` 内に配置します。
 
 ## 8. 実行方法
-ビルドが完了後、別々のターミナルを開いて以下のコマンドを実行します。
+ビルドが完了後、ターミナルで以下のコマンドを実行するだけで完了です。
+（※推論パイプラインの起動と同時に、Foxglove用の通信サーバー `foxglove_bridge` も自動的に起動するように設定されています）
 
-### Foxglove Bridge の起動
-```bash
-source /opt/ros/humble/setup.bash
-ros2 run foxglove_bridge foxglove_bridge --ros-args -p port:=8765
-```
-起動後、ブラウザ版Foxglove Studio（https://foxglove.dev/） を開き、`ws://<RunPodのIPアドレス>:8765` へ接続してください。
-
-### Vision Pilot 推論モデルの起動
 ```bash
 cd /workspace/autoware_vision_pilot/VisionPilot/middleware_recipes/ROS2
 source /opt/ros/humble/setup.bash
@@ -115,3 +108,15 @@ source install/setup.bash
 # シーンセグメンテーションのパイプラインを起動する例
 ros2 launch models run_pipeline.launch.py pipeline:=scene_seg video_path:="../data/video.mp4"
 ```
+
+### Foxglove Studio での可視化 (外部PCから)
+RunPod標準のSSH接続（ssh.runpod.io）はポートフォワーディング制限があるため、RunPodの「自動Web中継機能」を利用して画面を確認します。
+
+1. お手元のMac/PCで Foxglove Studio (デスクトップ版、または https://studio.foxglove.dev/ ) を開きます。
+2. 左メニュー等からコンセントのアイコン「Open connection」をクリックします。
+   - ※Foxglove Cloudの「Add Device(Agent)」画面は使いません。あくまでローカルとしてのダイレクト接続を利用します。
+3. リストから **`Foxglove WebSocket`** を選択してください。（ROS 2等ではありません）
+4. 右側のWebSocket URLの入力欄を空にして、以下を入力して「Open」を押します：
+   - **`wss://<自身のPod ID>-8765.proxy.runpod.net`**
+   - ※ `ws://` ではなく暗号化された `wss://` である点や、前後の余計なスペースに注意してください。
+5. 接続に成功したら枠が緑色になります。Imageパネル等を追加して `/autoseg/scene_seg/viz` などのトピックをサブスクライブし、リアルタイム映像を確認してください。
