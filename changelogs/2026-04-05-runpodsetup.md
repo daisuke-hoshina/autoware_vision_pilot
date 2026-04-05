@@ -110,13 +110,17 @@ ros2 launch models run_pipeline.launch.py pipeline:=scene_seg video_path:="../da
 ```
 
 ### Foxglove Studio での可視化 (外部PCから)
-RunPod標準のSSH接続（ssh.runpod.io）はポートフォワーディング制限があるため、RunPodの「自動Web中継機能」を利用して画面を確認します。
+RunPod上のWebSocket通信を安定して受信するため、RunPodの「公開用TCPポート（Exposed TCP port）」を利用してダイレクト接続します。
 
-1. お手元のMac/PCで Foxglove Studio (デスクトップ版、または https://studio.foxglove.dev/ ) を開きます。
-2. 左メニュー等からコンセントのアイコン「Open connection」をクリックします。
-   - ※Foxglove Cloudの「Add Device(Agent)」画面は使いません。あくまでローカルとしてのダイレクト接続を利用します。
-3. リストから **`Foxglove WebSocket`** を選択してください。（ROS 2等ではありません）
-4. 右側のWebSocket URLの入力欄を空にして、以下を入力して「Open」を押します：
-   - **`wss://<自身のPod ID>-8765.proxy.runpod.net`**
-   - ※ `ws://` ではなく暗号化された `wss://` である点や、前後の余計なスペースに注意してください。
-5. 接続に成功したら枠が緑色になります。Imageパネル等を追加して `/autoseg/scene_seg/viz` などのトピックをサブスクライブし、リアルタイム映像を確認してください。
+1. **接続用IP・ポートの確認**:
+   RunPodのDashboard（Pod画面）の「Connect」設定等に表示される `Foxglove  xx.xx.xx.xx:yyyyy:8765` の情報、もしくは直接接続（TCP）用のマッピングを確認します。
+   （例として `213.173.107.42:33215:8765` のように表記されている場合、`213.173.107.42`がIPアドレス、`33215`が外部からアクセス可能なポート番号です）
+2. **Foxglove Studioの設定**:
+   お手元のMac/PCで Foxglove Studio (デスクトップ版、または https://studio.foxglove.dev/ ) を開きます。
+3. 左メニュー等からコンセントのアイコン「Open connection」をクリックします。
+   - ※Foxglove Cloudの「Add Device(Agent)」画面は使いません。あくまでローカルツールとしてのダイレクト接続を利用します。
+4. リストから **`Foxglove WebSocket`** を選択してください。（ROS 2等ではありません）
+5. 右側のWebSocket URL入力欄を空にして、確認したIPアドレスとポート番号を入力し「Open」を押します：
+   - 例: **`ws://213.173.107.42:33215`**
+   - ※ `wss://` ではなく `ws://` となる点、うしろに `8765` は付けない点に気をつけてください。
+6. 接続に成功したら枠が緑色になります。Imageパネル等を追加して `/autoseg/scene_seg/viz` などのトピックをサブスクライブし、リアルタイム映像を確認してください。
