@@ -124,7 +124,7 @@ def generate_launch_description():
 
     # Foxglove Bridge Node (for WebSocket visualization)
     foxglove_bridge_node = Node(
-        package='foxglove_bridge', executable='foxglove_bridge_node', name='foxglove_bridge',
+        package='foxglove_bridge', executable='foxglove_bridge', name='foxglove_bridge',
         output='screen'
     )
 
