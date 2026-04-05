@@ -122,6 +122,12 @@ def generate_launch_description():
         condition=IfCondition(PythonExpression(["'", LaunchConfiguration('pipeline'), "' == 'autospeed'"]))
     )
 
+    # Foxglove Bridge Node (for WebSocket visualization)
+    foxglove_bridge_node = Node(
+        package='foxglove_bridge', executable='foxglove_bridge_node', name='foxglove_bridge',
+        output='screen'
+    )
+
     return LaunchDescription([
         video_path_arg,
         pipeline_arg,
@@ -134,5 +140,6 @@ def generate_launch_description():
         domain_seg_viz_node,
         scene3d_model_node,
         scene3d_viz_node,
-        autospeed_node
+        autospeed_node,
+        foxglove_bridge_node
     ])
